@@ -9,25 +9,25 @@ namespace NoInspectionsPlease
         public override string ID => "NoInspectionsPlease"; //Your mod ID (unique)
         public override string Name => "No Inspections, Please!"; //You mod name
         public override string Author => "Athlon"; //Your Username
-        public override string Version => "1.1"; //Version
+        public override string Version => "1.2"; //Version
 
         // Set this to true if you will be load custom assets from Assets folder.
         // This will create subfolder in Assets folder for your mod.
         public override bool UseAssetsFolder => false;
 
-        static FsmInt currentWeek;
-        static FsmInt nextInspection;
-        static FsmInt inspectionIntervalWeeks;
+        static FsmInt nextInspectionIntervalDays;
+        static FsmInt nextInspectionIntervalLetter;
+        static FsmInt nextInspectionDay;
 
-        const int NoInspectionValue = 999999999;
+        const int NoInspectionValue = 0;
 
         public override void OnLoad()
         {
             // Called once, when mod is loading after game is fully loaded
             PlayMakerFSM inspectionProcess = GameObject.Find("INSPECTION").transform.Find("Functions/InspectionProcess").gameObject.GetComponent<PlayMakerFSM>();
-            currentWeek = inspectionProcess.FsmVariables.GetFsmInt("_CurrentWeek");
-            nextInspection = inspectionProcess.FsmVariables.GetFsmInt("_NextInspection");
-            inspectionIntervalWeeks = inspectionProcess.FsmVariables.GetFsmInt("_InspectionIntervalWeeks");
+            nextInspectionIntervalDays = inspectionProcess.FsmVariables.GetFsmInt("_InspectionIntervalDays");
+            nextInspectionIntervalLetter = inspectionProcess.FsmVariables.GetFsmInt("_InspectionIntervalLetter");
+            nextInspectionDay = inspectionProcess.FsmVariables.GetFsmInt("_NextInspectionDay");
             UpdateInterval();
         }
 
@@ -36,15 +36,12 @@ namespace NoInspectionsPlease
             // Disabling inspection sets the nextInspection value to NoInspectionValue
             if ((bool)disableInspection.GetValue())
             {
-                nextInspection.Value = NoInspectionValue;
+                nextInspectionDay.Value = NoInspectionValue;
                 return;
             }
 
-            inspectionIntervalWeeks.Value = int.Parse(inspectionFrequency.GetValue().ToString());
-
-            // If player had previous version of NoInspection mod, or had set disableInspection to true, reset the value
-            if (nextInspection.Value == NoInspectionValue)
-                nextInspection.Value = currentWeek.Value + inspectionIntervalWeeks.Value;
+            nextInspectionIntervalLetter.Value = int.Parse(inspectionFrequency.GetValue().ToString()) * 7;
+            nextInspectionIntervalDays.Value = nextInspectionIntervalDays.Value + 7;
         }
 
         static Settings inspectionFrequency = new Settings("inspectionFrequency", "Inspection Frequency (in weeks)", 6, UpdateInterval);

@@ -4,7 +4,7 @@
 [![](https://img.shields.io/github/v/release/Athlon007/NoInspectionsPlease?style=for-the-badge)](https://github.com/Athlon007/NoInspectionsPlease/releases)
 [![](https://img.shields.io/github/license/Athlon007/NoInspectionsPlease?style=for-the-badge)](LICENSE.md)
 
-No Inspections, Please lets you change periodic inspection frequency or even disable it completly.
+No Inspections, Please! lets you change periodic inspection frequency or even disable it completly.
 
 ## Requirements
 
